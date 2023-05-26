@@ -2,7 +2,7 @@
 
 ## Usage
 
-```$ abusiv BaseDir AType URL```
+```$ abusiv {BaseDir} {AType} {URL}```
 
 ## Available Autoindex types
 
