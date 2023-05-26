@@ -53,8 +53,8 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
       with:
-        tag_name: "${{ inputs.SCRIPT_NAME }}_${{ matrix.os }}"
-        release_name: "Rel. ${{ inputs.SCRIPT_NAME }}_${{ matrix.os }}"
+        tag_name: "abusiv"
+        release_name: "abusiv"
         draft: false
         prerelease: false
 
