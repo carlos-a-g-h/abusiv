@@ -36,7 +36,8 @@ jobs:
       run: |
         pip install PyInstaller
         python -m PyInstaller --onefile "${{ env.FILE_PY }}"
-        Compress-Archive dist "${{ env.NAME_WINDOWS }}"
+        mv dist abusiv-windows64
+        Compress-Archive abusiv-windows64 "${{ env.NAME_WINDOWS }}"
 
     # Ubuntu / Linux
 #    - name: Linux (pyinstaller)
