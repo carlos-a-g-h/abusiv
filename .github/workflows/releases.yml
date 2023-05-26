@@ -37,6 +37,7 @@ jobs:
         pip install PyInstaller
         python -m PyInstaller --onefile "${{ env.FILE_PY }}"
         mv dist abusiv-windows64
+        mv README.md abusiv-windows64/README.md
         Compress-Archive abusiv-windows64 "${{ env.NAME_WINDOWS }}"
 
     # Ubuntu / Linux
