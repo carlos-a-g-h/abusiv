@@ -4,7 +4,7 @@
 
 ```$ abusiv {BaseDir} {AType} {URL}```
 
-## Available Autoindex types
+## Available Autoindex types (more will be added in the future)
 
 - h5ai
 
