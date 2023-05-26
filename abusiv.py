@@ -155,7 +155,7 @@ if __name__=="__main__":
 	app_name=Path(sys.argv[0]).name
 
 	if not len(sys.argv)==4:
-		print(f"\nUSAGE:\n\n$ {app_name} BASEDIR ATYPE URL\n\nAvailable Autoindex Types:\n- h5ai\n")
+		print(f"\nUSAGE:\n\n$ {app_name} BASEDIR ATYPE URL\n\nAvailable Autoindex Types:\n- h5ai\n\nv2023-05-26 by Carlos Alberto González Hernández")
 		exit(1)
 
 	bd=sys.argv[1]
