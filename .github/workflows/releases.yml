@@ -39,12 +39,12 @@ jobs:
         Compress-Archive dist "${{ env.NAME_WINDOWS }}"
 
     # Ubuntu / Linux
-    - name: Linux (pyinstaller)
-      if: ${{ matrix.os == 'ubuntu-20.04' }}
-      run: |
-        pip install pyinstaller
-        pyinstaller --onefile "${{ env.FILE_PY }}"
-        tar -cvf "${{ env.NAME_LINUX }}" dist
+#    - name: Linux (pyinstaller)
+#      if: ${{ matrix.os == 'ubuntu-20.04' }}
+#      run: |
+#        pip install pyinstaller
+#        pyinstaller --onefile "${{ env.FILE_PY }}"
+#        tar -cvf "${{ env.NAME_LINUX }}" dist
 
     # Create release
     - name: Create Release
@@ -70,14 +70,14 @@ jobs:
         asset_name: "${{ env.NAME_WINDOWS }}"
         asset_content_type: application/octet-stream
 
-    - name: Ubuntu / Linux (Upload Release Asset)
-      if: ${{ matrix.os == 'ubuntu-20.04' }}
-      id: ura-linux
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: "${{ env.NAME_LINUX }}"
-        asset_name: "${{ env.NAME_LINUX }}"
-        asset_content_type: application/octet-stream
+#    - name: Ubuntu / Linux (Upload Release Asset)
+#      if: ${{ matrix.os == 'ubuntu-20.04' }}
+#      id: ura-linux
+#      uses: actions/upload-release-asset@v1
+#      env:
+#        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+#      with:
+#        upload_url: ${{ steps.create_release.outputs.upload_url }}
+#        asset_path: "${{ env.NAME_LINUX }}"
+#        asset_name: "${{ env.NAME_LINUX }}"
+#        asset_content_type: application/octet-stream
