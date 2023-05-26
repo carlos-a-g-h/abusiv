@@ -1,3 +1,4 @@
+# TODO: fix this pipeline in order to propperly build for linux
 name: Create release
 
 on:
