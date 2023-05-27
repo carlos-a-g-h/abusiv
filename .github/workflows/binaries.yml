@@ -11,34 +11,15 @@ env:
   NAME_WINDOWS: "abusiv-windows.zip"
 
 jobs:
-  create-gh-release:
-    name: Create Github release
-    runs-on: ubuntu-latest
-    outputs:
-      # https://github.com/actions/upload-release-asset/issues/46
-      version: ${{ steps.step_version.outputs.version }}
-      upload_url: ${{ steps.create_release.outputs.upload_url }}
-    steps:
-    - name: Create Release
-      id: create_release
-      uses: actions/create-release@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
-      with:
-        tag_name: "${{ env.TAGNAME }}"
-        release_name: "${{ env.TAGNAME }}"
-        draft: false
-        prerelease: false
-
-  build-binaries:
+  job-one:
     name: Build binaries
-    needs: create-gh-release
     strategy:
       matrix:
         os: [ubuntu-20.04,windows-2019]
-
     runs-on: ${{ matrix.os }}
+
     steps:
+
     - name: Pull the repo
       uses: actions/checkout@v3
 
@@ -50,16 +31,7 @@ jobs:
       run: |
         pip install -r "${{ env.FILE_REQ }}"
 
-    - name: Windows (pyinstaller)
-      if: ${{ matrix.os == 'windows-2019' }}
-      run: |
-        pip install PyInstaller
-        python -m PyInstaller --onefile "${{ env.FILE_PY }}"
-        mv dist abusiv-windows
-        mv README.md abusiv-windows64/README.md
-        Compress-Archive abusiv-windows "${{ env.NAME_WINDOWS }}"
-
-    - name: Linux (pyinstaller)
+    - name: Linux (Build binary)
       if: ${{ matrix.os == 'ubuntu-20.04' }}
       run: |
         pip install pyinstaller
@@ -68,24 +40,72 @@ jobs:
         mv README.md abusiv-linux/README.md
         tar -cvf "${{ env.NAME_LINUX }}" abusiv-linux
 
-    - name: Windows (Upload Release Asset)
+    - name: Linux (Upload artifact)
+      if: ${{ matrix.os == 'ubuntu-20.04' }}
+      uses: actions/upload-artifact@3.1.2
+      with:
+        name: "${{ env.NAME_LINUX }}"
+        path: "${{ env.NAME_LINUX }}"
+
+    - name: Windows (Build binary)
       if: ${{ matrix.os == 'windows-2019' }}
+      run: |
+        pip install PyInstaller
+        python -m PyInstaller --onefile "${{ env.FILE_PY }}"
+        mv dist abusiv-windows
+        mv README.md abusiv-windows64/README.md
+        Compress-Archive abusiv-windows "${{ env.NAME_WINDOWS }}"
+
+    - name: Windows (Upload artifact)
+      if: ${{ matrix.os == 'ubuntu-20.04' }}
+      uses: actions/upload-artifact@3.1.2
+      with:
+        name: "${{ env.NAME_LINUX }}"
+        path: "${{ env.NAME_LINUX }}"
+
+  job-two:
+    name: Create release and add the assets
+    needs: job-one
+    runs-on: ubuntu-latest
+    steps:
+
+    - name: Download artifact (Linux)
+      uses: actions/download-artifact@v2.1.1
+      with:
+        name: "${{ env.NAME_LINUX }}"
+
+    - name: Download artifact (Windows)
+      uses: actions/download-artifact@v2.1.1
+      with:
+        name: "${{ env.NAME_WINDOWS }}"
+
+    - name: Create release
+      id: create-release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+      with:
+        tag_name: "${{ env.TAGNAME }}"
+        release_name: "${{ env.TAGNAME }}"
+        draft: false
+        prerelease: false
+
+    - name: Windows (Upload Release Asset)
       uses: actions/upload-release-asset@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
       with:
-        upload_url: ${{ needs.create_release.outputs.upload_url }}
+        upload_url: ${{ needs.create-release.outputs.upload_url }}
         asset_path: "${{ env.NAME_WINDOWS }}"
         asset_name: "${{ env.NAME_WINDOWS }}"
         asset_content_type: application/octet-stream
 
     - name: Ubuntu / Linux (Upload Release Asset)
-      if: ${{ matrix.os == 'ubuntu-20.04' }}
       uses: actions/upload-release-asset@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
       with:
-        upload_url: ${{ needs.create_release.outputs.upload_url }}
+        upload_url: ${{ needs.create-release.outputs.upload_url }}
         asset_path: "${{ env.NAME_LINUX }}"
         asset_name: "${{ env.NAME_LINUX }}"
         asset_content_type: application/octet-stream
