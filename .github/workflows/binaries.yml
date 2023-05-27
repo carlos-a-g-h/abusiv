@@ -29,7 +29,7 @@ jobs:
         prerelease: false
 
   build-binaries:
-    name: Build for Windows and Linux
+    name: Build binaries
     needs: create-release
     strategy:
       matrix:
@@ -63,7 +63,7 @@ jobs:
         pip install pyinstaller
         pyinstaller --onefile "${{ env.FILE_PY }}"
         mv dist abusiv-linux
-        mv README.md abusiv-windows64/README.md
+        mv README.md abusiv-linux/README.md
         tar -cvf "${{ env.NAME_LINUX }}" abusiv-linux
 
     - name: Windows (Upload Release Asset)
