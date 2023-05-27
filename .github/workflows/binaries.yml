@@ -68,7 +68,6 @@ jobs:
 
     - name: Windows (Upload Release Asset)
       if: ${{ matrix.os == 'windows-2019' }}
-      id: ura-windows
       uses: actions/upload-release-asset@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
@@ -80,7 +79,6 @@ jobs:
 
     - name: Ubuntu / Linux (Upload Release Asset)
       if: ${{ matrix.os == 'ubuntu-20.04' }}
-      id: ura-linux
       uses: actions/upload-release-asset@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
