@@ -57,7 +57,7 @@ jobs:
         Compress-Archive abusiv-windows "${{ env.NAME_WINDOWS }}"
 
     - name: Windows (Upload artifact)
-      if: ${{ matrix.os == 'ubuntu-20.04' }}
+      if: ${{ matrix.os == 'windows-2019' }}
       uses: actions/upload-artifact@v3
       with:
         name: "${{ env.NAME_WINDOWS }}"
@@ -78,6 +78,11 @@ jobs:
       uses: actions/download-artifact@v2.1.1
       with:
         name: "${{ env.NAME_WINDOWS }}"
+
+    - name: Make sure that the files exist
+      run: |
+        ls -l "${{ env.NAME_LINUX }}"
+        ls -l "${{ env.NAME_WINDOWS }}"
 
     - name: Create release
       id: create-release
