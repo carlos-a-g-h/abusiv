@@ -156,7 +156,7 @@ if __name__=="__main__":
 
 	if not len(sys.argv)==4:
 		print(f"\nUSAGE:\n\n$ {app_name} BASEDIR ATYPE URL\n\nAvailable Autoindex Types:\n- h5ai\n\nWritten by Carlos Alberto González Hernández\nVersion: 2023-05-26")
-		exit(1)
+		sys.exit(1)
 
 	bd=sys.argv[1]
 	atype=sys.argv[2]
