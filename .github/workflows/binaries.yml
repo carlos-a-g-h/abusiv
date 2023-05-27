@@ -42,7 +42,7 @@ jobs:
 
     - name: Linux (Upload artifact)
       if: ${{ matrix.os == 'ubuntu-20.04' }}
-      uses: actions/upload-artifact@3.1.2
+      uses: actions/upload-artifact@v3
       with:
         name: "${{ env.NAME_LINUX }}"
         path: "${{ env.NAME_LINUX }}"
@@ -58,7 +58,7 @@ jobs:
 
     - name: Windows (Upload artifact)
       if: ${{ matrix.os == 'ubuntu-20.04' }}
-      uses: actions/upload-artifact@3.1.2
+      uses: actions/upload-artifact@v3
       with:
         name: "${{ env.NAME_LINUX }}"
         path: "${{ env.NAME_LINUX }}"
