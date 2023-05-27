@@ -233,6 +233,11 @@ if __name__=="__main__":
 
 		sys.exit(1)
 
+	app_dir=Path(sys.argv[0]).parent
+	if app_dir.resolve()==Path(bdir).resolve():
+		print("\nERROR: Use a different directory")
+		sys.exit(1)
+
 	asyncio.run(manager(bdir,atype,url))
 	print("\nProgram finished!")
 	sys.exit(0)
