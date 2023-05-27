@@ -53,7 +53,7 @@ jobs:
         pip install PyInstaller
         python -m PyInstaller --onefile "${{ env.FILE_PY }}"
         mv dist abusiv-windows
-        mv ".\\README.md" ".\\abusiv-windows64\\README.md"
+        mv "README.md" "abusiv-windows/README.md"
         Compress-Archive abusiv-windows "${{ env.NAME_WINDOWS }}"
 
     - name: Windows (Upload artifact)
