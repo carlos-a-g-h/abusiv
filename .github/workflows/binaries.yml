@@ -85,7 +85,7 @@ jobs:
         ls -l "${{ env.NAME_WINDOWS }}"
 
     - name: Create release
-      id: create-release
+      id: CreateRelease
       uses: actions/create-release@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
@@ -100,7 +100,7 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
       with:
-        upload_url: ${{ needs.create-release.outputs.upload_url }}
+        upload_url: ${{ steps.CreateRelease.outputs.upload_url }}
         asset_path: "${{ env.NAME_LINUX }}"
         asset_name: "${{ env.NAME_LINUX }}"
         asset_content_type: application/octet-stream
@@ -110,7 +110,7 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
       with:
-        upload_url: ${{ needs.create-release.outputs.upload_url }}
+        upload_url: ${{ steps.CreateRelease.outputs.upload_url }}
         asset_path: "${{ env.NAME_WINDOWS }}"
         asset_name: "${{ env.NAME_WINDOWS }}"
         asset_content_type: application/octet-stream
