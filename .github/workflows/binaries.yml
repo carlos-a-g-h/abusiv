@@ -7,11 +7,11 @@ env:
   TAGNAME: "abusiv-ok"
   FILE_REQ: "req.txt"
   FILE_PY: "abusiv.py"
-  NAME_LINUX: "abusiv.tar"
-  NAME_WINDOWS: "abusiv.zip"
+  NAME_LINUX: "abusiv-linux.tar"
+  NAME_WINDOWS: "abusiv-windows.zip"
 
 jobs:
-  create-release:
+  create-gh-release:
     name: Create Github release
     runs-on: ubuntu-latest
     outputs:
@@ -30,7 +30,7 @@ jobs:
 
   build-binaries:
     name: Build binaries
-    needs: create-release
+    needs: create-gh-release
     strategy:
       matrix:
         os: [ubuntu-20.04,windows-2019]
