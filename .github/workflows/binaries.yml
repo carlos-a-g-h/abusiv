@@ -60,8 +60,8 @@ jobs:
       if: ${{ matrix.os == 'ubuntu-20.04' }}
       uses: actions/upload-artifact@v3
       with:
-        name: "${{ env.NAME_LINUX }}"
-        path: "${{ env.NAME_LINUX }}"
+        name: "${{ env.NAME_WINDOWS }}"
+        path: "${{ env.NAME_WINDOWS }}"
 
   job-two:
     name: Create release and add the assets
