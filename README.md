@@ -10,6 +10,10 @@
 
 ## Changelog
 
+### 2023-05-27
+
+Fixed the exit()...?
+
 ### 2023-05-26
 
 First release
