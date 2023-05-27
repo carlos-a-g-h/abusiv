@@ -15,6 +15,8 @@ jobs:
     name: Create Github release
     runs-on: ubuntu-latest
     outputs:
+      # https://github.com/actions/upload-release-asset/issues/46
+      version: ${{ steps.step_version.outputs.version }}
       upload_url: ${{ steps.create_release.outputs.upload_url }}
     steps:
     - name: Create Release
