@@ -1,0 +1,91 @@
+name: Create release and binaries
+
+on:
+  workflow_dispatch:
+
+env:
+  TAGNAME: "abusiv-ok"
+  FILE_REQ: "req.txt"
+  FILE_PY: "abusiv.py"
+  NAME_LINUX: "abusiv.tar"
+  NAME_WINDOWS: "abusiv.zip"
+
+jobs:
+  create-release:
+    name: Create Github release
+    runs-on: ubuntu-latest
+    outputs:
+      upload_url: ${{ steps.create_release.outputs.upload_url }}
+    steps:
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+      with:
+        tag_name: "${{ env.TAGNAME }}"
+        release_name: "${{ env.TAGNAME }}"
+        draft: false
+        prerelease: false
+
+  build-binaries:
+    name: Build for Windows and Linux
+    needs: create-release
+    strategy:
+      matrix:
+        os: [ubuntu-20.04,windows-2019]
+
+    runs-on: ${{ matrix.os }}
+    steps:
+    - name: Pull the repo
+      uses: actions/checkout@v3
+
+    - name: Setup Python (1)
+      uses: actions/setup-python@v3
+      with:
+        python-version: "3.9.6"
+    - name: Setup Python (2)
+      run: |
+        pip install -r "${{ env.FILE_REQ }}"
+
+    - name: Windows (pyinstaller)
+      if: ${{ matrix.os == 'windows-2019' }}
+      run: |
+        pip install PyInstaller
+        python -m PyInstaller --onefile "${{ env.FILE_PY }}"
+        mv dist abusiv-windows
+        mv README.md abusiv-windows64/README.md
+        Compress-Archive abusiv-windows "${{ env.NAME_WINDOWS }}"
+
+    - name: Linux (pyinstaller)
+      if: ${{ matrix.os == 'ubuntu-20.04' }}
+      run: |
+        pip install pyinstaller
+        pyinstaller --onefile "${{ env.FILE_PY }}"
+        mv dist abusiv-linux
+        mv README.md abusiv-windows64/README.md
+        tar -cvf "${{ env.NAME_LINUX }}" abusiv-linux
+
+    - name: Windows (Upload Release Asset)
+      if: ${{ matrix.os == 'windows-2019' }}
+      id: ura-windows
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+      with:
+        upload_url: ${{ needs.create_release.outputs.upload_url }}
+        asset_path: "${{ env.NAME_WINDOWS }}"
+        asset_name: "${{ env.NAME_WINDOWS }}"
+        asset_content_type: application/octet-stream
+
+    - name: Ubuntu / Linux (Upload Release Asset)
+      if: ${{ matrix.os == 'ubuntu-20.04' }}
+      id: ura-linux
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+      with:
+        upload_url: ${{ needs.create_release.outputs.upload_url }}
+        asset_path: "${{ env.NAME_LINUX }}"
+        asset_name: "${{ env.NAME_LINUX }}"
+        asset_content_type: application/octet-stream
