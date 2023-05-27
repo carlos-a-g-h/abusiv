@@ -4,11 +4,13 @@ on:
   workflow_dispatch:
 
 env:
-  TAGNAME: "abusiv-ok"
+  TAGNAME: "abusiv"
   FILE_REQ: "req.txt"
   FILE_PY: "abusiv.py"
   NAME_LINUX: "abusiv-linux.tar"
+  NAME_LINUX_STEM: "abusiv-linux"
   NAME_WINDOWS: "abusiv-windows.zip"
+  NAME_WINDOWS_STEM: "abusiv-windows"
 
 jobs:
   job-one:
@@ -36,9 +38,9 @@ jobs:
       run: |
         pip install pyinstaller
         pyinstaller --onefile "${{ env.FILE_PY }}"
-        mv dist abusiv-linux
-        mv README.md abusiv-linux/README.md
-        tar -cvf "${{ env.NAME_LINUX }}" abusiv-linux
+        mv dist "${{ env.NAME_LINUX_STEM }}"
+        mv README.md "${{ env.NAME_LINUX_STEM }}/README.md"
+        tar -cvf "${{ env.NAME_LINUX }}" "${{ env.NAME_LINUX_STEM }}"
 
     - name: Linux (Upload artifact)
       if: ${{ matrix.os == 'ubuntu-20.04' }}
@@ -52,9 +54,9 @@ jobs:
       run: |
         pip install PyInstaller
         python -m PyInstaller --onefile "${{ env.FILE_PY }}"
-        mv dist abusiv-windows
-        mv "README.md" "abusiv-windows/README.md"
-        Compress-Archive abusiv-windows "${{ env.NAME_WINDOWS }}"
+        mv dist "${{ env.NAME_WINDOWS_STEM }}"
+        mv "README.md" "${{ env.NAME_WINDOWS_STEM }}/README.md"
+        Compress-Archive "${{ env.NAME_WINDOWS_STEM }}" "${{ env.NAME_WINDOWS }}"
 
     - name: Windows (Upload artifact)
       if: ${{ matrix.os == 'windows-2019' }}
