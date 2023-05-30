@@ -2,9 +2,14 @@ name: Create release and binaries
 
 on:
   workflow_dispatch:
+    inputs:
+      TAGNAME:
+        description: Tag name (Version)
+        required: true
+        type: string
+        default: "abusiv"
 
 env:
-  TAGNAME: "abusiv"
   FILE_REQ: "req.txt"
   FILE_PY: "abusiv.py"
   NAME_LINUX: "abusiv-linux.tar"
@@ -92,8 +97,8 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
       with:
-        tag_name: "${{ env.TAGNAME }}"
-        release_name: "${{ env.TAGNAME }}"
+        tag_name: "${{ inputs.TAGNAME }}"
+        release_name: "${{ inputs.TAGNAME }}"
         draft: false
         prerelease: false
 
