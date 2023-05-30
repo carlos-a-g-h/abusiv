@@ -232,7 +232,7 @@ if __name__=="__main__":
 		for t in atypes:
 			print(f"- {t}")
 
-		print("\nWritten by Carlos Alberto González Hernández\nVersion: 2023-05-27\n")
+		print("\nWritten by Carlos Alberto González Hernández\nVersion: 2023-05-29\n")
 		sys.exit(1)
 
 	bdir_raw=sys.argv[1]
