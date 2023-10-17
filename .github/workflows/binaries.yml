@@ -112,6 +112,9 @@ jobs:
         asset_name: "${{ env.NAME_LINUX }}"
         asset_content_type: application/octet-stream
 
+    - name: (Debug) Show upload URL
+      run: echo "${{ steps.CreateRelease.outputs.upload_url }}"
+
     - name: Windows (Upload Release Asset)
       uses: actions/upload-release-asset@v1
       env:
